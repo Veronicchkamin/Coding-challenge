@@ -1,0 +1,183 @@
+const { pause } = require("codeceptjs");
+const assert = require('chai').assert;
+
+Feature('code challenge');
+
+Scenario('task one - dsl resultlist @dsl-result', ({ I }) => {
+    //GIVEN that I open  www.verivox.de
+    I.amOnPage('https://www.verivox.de');
+    I.wait(2);
+
+    // THEN accept cookie consent
+    I.click('[class="gdpr-button gdpr-accept-all"]');
+    I.waitForVisible('[class="icn icn-dsl-outlined"]');
+
+    // WHEN navigate to the DSL calculator page
+    I.click('[class="icn icn-dsl-outlined"]');
+
+    // AND select 100 Mbit/s bandwidth option
+    I.wait(3);
+    I.click('100 MBit/s');
+
+    I.wait(1);
+   
+    // AND click Jetxt vergleichen
+    I.click('Jetzt vergleichen');
+
+    // AND click "Ohne Adresseingabe fortfahren" button
+    I.wait(8);
+    I.waitForVisible('[class="order-2 order-md-1 text-primary cursor-pointer pr-4"]');
+    I.click('[class="order-2 order-md-1 text-primary cursor-pointer pr-4"]');
+
+    // THEN see a page that lists the available tariffs
+    I.wait(2);
+    I.see('Ermittelte Tarife');
+
+    // THEN see at least 5 internet tariffs are displayed
+    I.seeElement('(//*[@class="d-flex flex-column"])[1]');
+    I.seeElement('(//*[@class="d-flex flex-column"])[2]');
+    I.seeElement('(//*[@class="d-flex flex-column"])[3]');
+    I.seeElement('(//*[@class="d-flex flex-column"])[4]');
+    I.seeElement('(//*[@class="d-flex flex-column"])[5]');
+
+    // THEN see the displayed tariffs provide at least 100 Mbit/s download speed
+    I.see('ab 100 Mbits/s');
+});
+
+
+
+
+
+Scenario('task two - dsl load all results @dsl-load-all-results', async ({ I }) => {
+    //GIVEN that I open  www.verivox.de
+    I.amOnPage('https://www.verivox.de');
+    I.wait(2);
+
+    // THEN accept cookie consent
+    I.click('[class="gdpr-button gdpr-accept-all"]');
+    I.waitForVisible('[class="icn icn-dsl-outlined"]');
+    I.click('[class="icn icn-dsl-outlined"]');
+
+    // WHEN navigate to the DSL calculator page
+    I.click('[class="icn icn-dsl-outlined"]');
+
+    // AND select 100 Mbit/s bandwidth option
+    I.wait(3);
+    I.click('100 MBit/s');
+
+    I.wait(1);
+ 
+    // AND click Jetxt vergleichen
+    I.click('Jetzt vergleichen');
+
+    // AND click "Ohne Adresseingabe fortfahren" button
+    I.wait(8);
+    I.waitForVisible('[class="order-2 order-md-1 text-primary cursor-pointer pr-4"]');
+    I.click('[class="order-2 order-md-1 text-primary cursor-pointer pr-4"]');
+
+    // THEN see a page that lists the available tariffs
+    I.wait(2);
+    I.see('Ermittelte Tarife');
+
+    // THEN see at least 5 internet tariffs are displayed
+    I.seeElement('(//*[@class="d-flex flex-column"])[1]');
+    I.seeElement('(//*[@class="d-flex flex-column"])[2]');
+    I.seeElement('(//*[@class="d-flex flex-column"])[3]');
+    I.seeElement('(//*[@class="d-flex flex-column"])[4]');
+    I.seeElement('(//*[@class="d-flex flex-column"])[5]');
+
+    // THEN see the displayed tariffs provide at least 100 Mbit/s download speed
+    I.see('ab 100 Mbits/s');
+
+
+    
+    const maxTries = 20;
+    for (let currentTry = 1; currentTry <= maxTries; currentTry++) {
+      const loadTariffButton = await I.grabNumberOfVisibleElements(
+        '[class^="btn btn-primary text"]'
+      );
+      console.log(loadTariffButton);
+      if (!loadTariffButton >= 1) {
+      break;
+         }
+         I.scrollTo('[class^="btn btn-primary text"]');
+         I.click('[class^="btn btn-primary text"]');
+         I.wait(3);
+   }
+
+
+    // verify the weitere Tarife laden button is no longer displayed when all the tariffs are visible
+    I.dontSeeElement('[class^="btn btn-primary text"]');
+
+    //	the total number of tariffs displayed matches the total listed in the Ermittelte Tarife section
+    const numberOfTariffs = await I.grabNumberOfVisibleElements('(//*[@class="d-flex flex-column"])');
+    const expectedNumberOfTariffs = await  I.grabTextFrom('[class="summary-tariff"]');
+
+    console.log(numberOfTariffs, expectedNumberOfTariffs);
+  assert.include(expectedNumberOfTariffs,numberOfTariffs);
+
+
+});
+
+
+Scenario('task three - dsl offer details @dsl-offer-details', async ({ I }) => {
+    //GIVEN that I open  www.verivox.de
+    I.amOnPage('https://www.verivox.de');
+    I.wait(2);
+
+    // THEN accept cookie consent
+    I.click('[class="gdpr-button gdpr-accept-all"]');
+    I.waitForVisible('[class="icn icn-dsl-outlined"]');
+    I.click('[class="icn icn-dsl-outlined"]');
+
+    // WHEN navigate to the DSL calculator page
+    I.click('[class="icn icn-dsl-outlined"]');
+
+    // AND select 100 Mbit/s bandwidth option
+    I.wait(3);
+    I.click('100 MBit/s');
+
+    I.wait(1);
+ 
+    // AND click Jetxt vergleichen
+    I.click('Jetzt vergleichen');
+
+    // AND click "Ohne Adresseingabe fortfahren" button
+    I.wait(8);
+    I.waitForVisible('[class="order-2 order-md-1 text-primary cursor-pointer pr-4"]');
+    I.click('[class="order-2 order-md-1 text-primary cursor-pointer pr-4"]');
+
+    // THEN see a page that lists the available tariffs
+    I.wait(2);
+    I.see('Ermittelte Tarife');
+
+    // THEN see at least 5 internet tariffs are displayed
+    I.seeElement('(//*[@class="d-flex flex-column"])[1]');
+    I.seeElement('(//*[@class="d-flex flex-column"])[2]');
+    I.seeElement('(//*[@class="d-flex flex-column"])[3]');
+    I.seeElement('(//*[@class="d-flex flex-column"])[4]');
+    I.seeElement('(//*[@class="d-flex flex-column"])[5]');
+
+    // THEN see the displayed tariffs provide at least 100 Mbit/s download speed
+    I.see('ab 100 Mbits/s');
+
+
+    I.click('(//*[@class="button-primary w-100 ng-star-inserted"])[1]');
+    
+     //THEN I should see the corresponding offer page for the selected tariff
+     I.wait(2);
+     I.seeInCurrentUrl('https://www.verivox.de/internet/tarif');
+     // verify 5 minuten online wechseln button is shown
+     I.seeElement('[class^="button-primary cta_component"]');
+
+     //tariff details
+
+     I.seeElement('[id="offer-price"]');
+     I.seeElement('[id="tariff_name"]');
+     I.seeElement('[class="price-item__recurring price-item--bold"]');
+
+     I.see('Tarifkosten');
+     I.see('Hardware');
+     I.see('Optionen');
+
+});
