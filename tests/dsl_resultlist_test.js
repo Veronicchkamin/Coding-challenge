@@ -1,4 +1,6 @@
 const { pause } = require("codeceptjs");
+const landingPageSteps = require("../src/steps/LandingPageSteps");
+const resultlistPageSteps = require("../src/steps/ResultlistPageSteps");
 const assert = require('chai').assert;
 
 Feature('code challenge');
@@ -6,23 +8,18 @@ Feature('code challenge');
 Scenario('task one - dsl resultlist @dsl-result', ({ I }) => {
     //GIVEN that I open  www.verivox.de
     I.amOnPage('https://www.verivox.de');
-    I.wait(2);
-
+  
     // THEN accept cookie consent
-    I.click('[class="gdpr-button gdpr-accept-all"]');
-    I.waitForVisible('[class="icn icn-dsl-outlined"]');
+    landingPageSteps.acceptAllCookies();
 
     // WHEN navigate to the DSL calculator page
-    I.click('[class="icn icn-dsl-outlined"]');
-
+    landingPageSteps.selectDslIcon();
+  
     // AND select 100 Mbit/s bandwidth option
-    I.wait(3);
-    I.click('100 MBit/s');
-
-    I.wait(1);
+   landingPageSteps.selectHunderdMbitIcon();
    
     // AND click Jetxt vergleichen
-    I.click('Jetzt vergleichen');
+   landingPageSteps.clickJetztVergleichenButton();
 
     // AND click "Ohne Adresseingabe fortfahren" button
     I.wait(8);
@@ -51,24 +48,17 @@ Scenario('task one - dsl resultlist @dsl-result', ({ I }) => {
 Scenario('task two - dsl load all results @dsl-load-all-results', async ({ I }) => {
     //GIVEN that I open  www.verivox.de
     I.amOnPage('https://www.verivox.de');
-    I.wait(2);
+ // THEN accept cookie consent
+ landingPageSteps.acceptAllCookies();
 
-    // THEN accept cookie consent
-    I.click('[class="gdpr-button gdpr-accept-all"]');
-    I.waitForVisible('[class="icn icn-dsl-outlined"]');
-    I.click('[class="icn icn-dsl-outlined"]');
+ // WHEN navigate to the DSL calculator page
+ landingPageSteps.selectDslIcon();
 
-    // WHEN navigate to the DSL calculator page
-    I.click('[class="icn icn-dsl-outlined"]');
+ // AND select 100 Mbit/s bandwidth option
+landingPageSteps.selectHunderdMbitIcon();
 
-    // AND select 100 Mbit/s bandwidth option
-    I.wait(3);
-    I.click('100 MBit/s');
-
-    I.wait(1);
- 
-    // AND click Jetxt vergleichen
-    I.click('Jetzt vergleichen');
+ // AND click Jetxt vergleichen
+landingPageSteps.clickJetztVergleichenButton();
 
     // AND click "Ohne Adresseingabe fortfahren" button
     I.wait(8);
@@ -126,22 +116,16 @@ Scenario('task three - dsl offer details @dsl-offer-details', async ({ I }) => {
     I.wait(2);
 
     // THEN accept cookie consent
-    I.click('[class="gdpr-button gdpr-accept-all"]');
-    I.waitForVisible('[class="icn icn-dsl-outlined"]');
-    I.click('[class="icn icn-dsl-outlined"]');
+    landingPageSteps.acceptAllCookies();
 
     // WHEN navigate to the DSL calculator page
-    I.click('[class="icn icn-dsl-outlined"]');
-
+    landingPageSteps.selectDslIcon();
+  
     // AND select 100 Mbit/s bandwidth option
-    I.wait(3);
-    I.click('100 MBit/s');
-
-    I.wait(1);
- 
+   landingPageSteps.selectHunderdMbitIcon();
+   
     // AND click Jetxt vergleichen
-    I.click('Jetzt vergleichen');
-
+   landingPageSteps.clickJetztVergleichenButton();
     // AND click "Ohne Adresseingabe fortfahren" button
     I.wait(8);
     I.waitForVisible('[class="order-2 order-md-1 text-primary cursor-pointer pr-4"]');
