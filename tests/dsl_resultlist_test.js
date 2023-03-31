@@ -1,5 +1,7 @@
 const { pause } = require("codeceptjs");
+const ResultlistPage = require("../src/pages/ResultlistPage");
 const landingPageSteps = require("../src/steps/LandingPageSteps");
+const ResultlistPageSteps = require("../src/steps/ResultlistPageSteps");
 const resultlistPageSteps = require("../src/steps/ResultlistPageSteps");
 const assert = require('chai').assert;
 
@@ -22,20 +24,13 @@ Scenario('task one - dsl resultlist @dsl-result', ({ I }) => {
    landingPageSteps.clickJetztVergleichenButton();
 
     // AND click "Ohne Adresseingabe fortfahren" button
-    I.wait(8);
-    I.waitForVisible('[class="order-2 order-md-1 text-primary cursor-pointer pr-4"]');
-    I.click('[class="order-2 order-md-1 text-primary cursor-pointer pr-4"]');
+   ResultlistPage.pressOhneAdresseingabefortfahren();
 
     // THEN see a page that lists the available tariffs
-    I.wait(2);
-    I.see('Ermittelte Tarife');
+    
+    ResultlistPageSteps.seeAllTariffElements(5);
 
     // THEN see at least 5 internet tariffs are displayed
-    I.seeElement('(//*[@class="d-flex flex-column"])[1]');
-    I.seeElement('(//*[@class="d-flex flex-column"])[2]');
-    I.seeElement('(//*[@class="d-flex flex-column"])[3]');
-    I.seeElement('(//*[@class="d-flex flex-column"])[4]');
-    I.seeElement('(//*[@class="d-flex flex-column"])[5]');
 
     // THEN see the displayed tariffs provide at least 100 Mbit/s download speed
     I.see('ab 100 Mbits/s');
@@ -80,20 +75,8 @@ landingPageSteps.clickJetztVergleichenButton();
     I.see('ab 100 Mbits/s');
 
 
-    
-    const maxTries = 20;
-    for (let currentTry = 1; currentTry <= maxTries; currentTry++) {
-      const loadTariffButton = await I.grabNumberOfVisibleElements(
-        '[class^="btn btn-primary text"]'
-      );
-      console.log(loadTariffButton);
-      if (!loadTariffButton >= 1) {
-      break;
-         }
-         I.scrollTo('[class^="btn btn-primary text"]');
-         I.click('[class^="btn btn-primary text"]');
-         I.wait(3);
-   }
+    //Load all tariffs
+   await ResultlistPageSteps.loadAllTariffs();
 
 
     // verify the weitere Tarife laden button is no longer displayed when all the tariffs are visible
